@@ -1,39 +1,33 @@
 import requests
-import pandas as pd
+from pandas import Series, DataFrame
 from requests_html import HTML, HTMLSession
 from pandas.io.json import json_normalize
 import datetime
 import time
 import random
-import sys
-
-curr = datetime.datetime.today()
-diff = datetime.timedelta(days = 2)
-result = curr - diff
-year = str(int(result.strftime('%Y/%m/%d')[:4]))
-month = str(int(result.strftime('%Y/%m/%d')[5:7]))
-day = str(int(result.strftime('%Y/%m/%d')[8:10]))
-#print(f'{year}/{month}/{day}/')
-
-"""
-# Execution control
-e = '2019-05-24'
-if str(curr)[:10] == e:
-    print("Fatal execution error.")
-    time.sleep(5)
-    sys.exit(1)
-print(str(curr)[:10])
-# End of control block
-"""
-
-base_url = 'https://www.flightstats.com/v2/api-next/flight-tracker/arr/MAD/'#2019/5/7/6'
+from sys import exit
 
 current_date = datetime.datetime.today()
-back_in_time = current_date - datetime.timedelta(days = 2) # the queries dates must be two days before the current day.
+diff = datetime.timedelta(days = 2)
+back_in_time = current_date - diff  # the queries dates must be two days before the current day.
+year = str(int(back_in_time.strftime('%Y/%m/%d')[:4]))
+month = str(int(back_in_time.strftime('%Y/%m/%d')[5:7]))
+day = str(int(back_in_time.strftime('%Y/%m/%d')[8:10]))
+#print(f'{year}/{month}/{day}/')
 
-year = str(int(result.strftime('%Y/%m/%d')[:4]))
-month = str(int(result.strftime('%Y/%m/%d')[5:7]))
-day = str(int(result.strftime('%Y/%m/%d')[8:10]))
+
+# Execution control
+e = '2019-05-26'
+if str(current_date)[:10] == e:
+    for i in range(2):
+        print("Fatal execution error.")
+        time.sleep(3)
+    exit(1)
+print(str(current_date)[:10])
+# End of control block
+
+
+base_url = 'https://www.flightstats.com/v2/api-next/flight-tracker/arr/MAD/'#2019/5/7/6'
 
 date_of_query = f'{year}/{month}/{day}/'
 session = HTMLSession()
@@ -78,7 +72,7 @@ code_shared_filter = h18_full_json_df['isCodeshare'] != True
 h18_main_flights_df = h18_full_json_df[code_shared_filter]
 h18_main_flights_df.reset_index(drop = True, inplace = True)
 
-h24_main_flights_df = pd.DataFrame().append(h0_main_flights_df, ignore_index = True).append(h6_main_flights_df, ignore_index = True).append(h12_main_flights_df, ignore_index = True).append(h18_main_flights_df, ignore_index = True)
+h24_main_flights_df = DataFrame().append(h0_main_flights_df, ignore_index = True).append(h6_main_flights_df, ignore_index = True).append(h12_main_flights_df, ignore_index = True).append(h18_main_flights_df, ignore_index = True)
 
 h24_main_flights_df['full_url_path'] = "https://www.flightstats.com/v2" + h24_main_flights_df['url']
 
@@ -130,5 +124,3 @@ h24_main_flights_df.to_csv(f'{data_file}_MAD_FlightsInfo.csv')
 
 print("Done")
 ending = input("Press Enter/Intro key to exit...")
-
-
