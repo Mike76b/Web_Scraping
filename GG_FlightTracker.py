@@ -15,18 +15,6 @@ month = str(int(back_in_time.strftime('%Y/%m/%d')[5:7]))
 day = str(int(back_in_time.strftime('%Y/%m/%d')[8:10]))
 #print(f'{year}/{month}/{day}/')
 
-
-# Execution control
-e = '2019-05-26'
-if str(current_date)[:10] == e:
-    for i in range(2):
-        print("Fatal execution error.")
-        time.sleep(3)
-    exit(1)
-print(str(current_date)[:10])
-# End of control block
-
-
 base_url = 'https://www.flightstats.com/v2/api-next/flight-tracker/arr/MAD/'#2019/5/7/6'
 
 date_of_query = f'{year}/{month}/{day}/'
